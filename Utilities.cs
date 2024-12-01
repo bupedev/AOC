@@ -25,6 +25,10 @@ public static class Utilities {
         return input.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries);
     }
 
+    public static T[][] AsMatrix<T>(this IEnumerable<IEnumerable<T>> values) {
+        return values.Select(x => x.ToArray()).ToArray();
+    }
+
     public static T[][] ToMatrix<T>(this string input, Func<char, T> selector) {
         var lines = input.SplitOnNewLines();
         var rowsCount = lines.Length;
