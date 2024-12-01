@@ -20,7 +20,7 @@ var puzzleTextOption = new Option<string?>(
     "The input text for the puzzle. Mutually exclusive with --file (-f)."
 );
 
-var rootCommand = new RootCommand("Bupé's solutions to Advent of Code 2024 (https://adventofcode.com/2024)");
+var rootCommand = new RootCommand("Bupé's solutions to Advent of Code (https://adventofcode.com)");
 
 rootCommand.AddOption(yearNumberOption);
 rootCommand.AddOption(dayNumberOption);
