@@ -16,4 +16,12 @@ public static class Utilities {
             queue.Dequeue();
         }
     }
+
+    public static string[] SplitOnNewLines(this string input) {
+        return input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    public static string[] SplitOnWhitespace(this string input) {
+        return input.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries);
+    }
 }

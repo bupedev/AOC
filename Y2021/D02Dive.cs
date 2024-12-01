@@ -3,7 +3,7 @@ namespace AOC.Y2021;
 public class D02Dive() : Solution(2021, 2) {
     protected override object GetPart1Result(string input) {
         var finalState = input
-            .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+            .SplitOnNewLines()
             .Select(ParseLine)
             .Aggregate(
                 (Depth: 0, Distance: 0),
@@ -25,7 +25,7 @@ public class D02Dive() : Solution(2021, 2) {
 
     protected override object GetPart2Result(string input) {
         var finalState = input
-            .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+            .SplitOnNewLines()
             .Select(ParseLine)
             .Aggregate(
                 (Aim: 0, Depth: 0, Distance: 0),
@@ -45,7 +45,7 @@ public class D02Dive() : Solution(2021, 2) {
     }
 
     private static (Axis Axis, int Quantity) ParseLine(string line) {
-        var tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        var tokens = line.SplitOnWhitespace();
 
         var axis = tokens[0] switch {
             "forward" => Axis.Horizontal,
