@@ -17,6 +17,10 @@ public static class Utilities {
         }
     }
 
+    public static TOut Then<TIn, TOut>(this TIn value, Func<TIn, TOut> func) {
+        return func(value);
+    }
+
     public static string[] SplitOnNewLines(this string input) {
         return input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
     }
@@ -27,6 +31,16 @@ public static class Utilities {
 
     public static T[][] AsMatrix<T>(this IEnumerable<IEnumerable<T>> values) {
         return values.Select(x => x.ToArray()).ToArray();
+    }
+
+    public static T[][] Transpose<T>(this IEnumerable<IEnumerable<T>> source) {
+        var sourceArray = source.AsMatrix();
+        if (sourceArray.Length == 0) return [];
+        var columnCount = sourceArray.GetColumnCount();
+        return Enumerable
+            .Range(0, columnCount)
+            .Select(columnIndex => sourceArray.Select(row => row[columnIndex]).ToArray())
+            .ToArray();
     }
 
     public static T[][] ToMatrix<T>(this string input, Func<char, T> selector) {
@@ -42,19 +56,6 @@ public static class Utilities {
         }
 
         return matrix;
-    }
-
-    public static T[][] Transpose<T>(this T[][] matrix) {
-        var rowCount = matrix.GetRowCount();
-        var columnCount = matrix.GetColumnCount();
-
-        var columns = new T[columnCount][];
-        for (var j = 0; j < columnCount; j++) {
-            columns[j] = new T[rowCount];
-            for (var i = 0; i < rowCount; i++) columns[j][i] = matrix[i][j];
-        }
-
-        return columns;
     }
 
     public static T[] GetRowByIndex<T>(this T[][] matrix, int rowIndex) {
@@ -76,7 +77,7 @@ public static class Utilities {
     }
 
     public static int GetColumnCount<T>(this T[][] matrix) {
-        return matrix[0].Length;
+        return matrix.Max(row => row.Length);
     }
 
     public static string Join(this IEnumerable<string> values, string? separator = null) {
