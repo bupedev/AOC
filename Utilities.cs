@@ -1,6 +1,10 @@
 namespace AOC;
 
 public static class Utilities {
+    public static IEnumerable<(T First, T Second)> Pairwise<T>(this IEnumerable<T> source) {
+        return source.SlidingWindow(2).Select(pair => (pair[0], pair[1]));
+    }
+
     public static IEnumerable<T[]> SlidingWindow<T>(this IEnumerable<T> source, int windowSize) {
         using var enumerator = source.GetEnumerator();
         var queue = new Queue<T>();
@@ -92,5 +96,33 @@ public static class Utilities {
                 return histogram;
             }
         );
+    }
+
+    public static IEnumerable<T> RemoveAt<T>(this IEnumerable<T> source, int indexToRemove) {
+        if (source == null) throw new ArgumentNullException(nameof(source));
+
+        return source
+            .Select(
+                (item, index) => new {
+                    Item = item,
+                    Index = index
+                }
+            )
+            .Where(x => x.Index != indexToRemove)
+            .Select(x => x.Item);
+    }
+
+    public static bool IsAscending<T>(this IEnumerable<T> numbers) where T : IComparable<T> {
+        return !numbers
+            .Pairwise()
+            .Select(pair => pair.Second.CompareTo(pair.First) <= 0)
+            .Any(isDescendingOrEqual => isDescendingOrEqual);
+    }
+
+    public static bool IsDescending<T>(this IEnumerable<T> numbers) where T : IComparable<T> {
+        return !numbers
+            .Pairwise()
+            .Select(pair => pair.Second.CompareTo(pair.First) >= 0)
+            .Any(isAscendingOrEqual => isAscendingOrEqual);
     }
 }
