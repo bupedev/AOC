@@ -1,3 +1,5 @@
+using AOC.Utilities;
+
 namespace AOC.Y2021;
 
 public class D03BinaryDiagnostic() : Solution(2021, 3) {
@@ -10,8 +12,8 @@ public class D03BinaryDiagnostic() : Solution(2021, 3) {
 
     private int GetRate(string input, char targetBit) {
         var rateBits = input
-            .ToMatrix(t => t)
-            .Transpose()
+            .ToMatrix()
+            .AsColumns()
             .Select(
                 column => GetBitByCommonality(column, Commonality.Most) == targetBit
                     ? "1"
@@ -30,18 +32,19 @@ public class D03BinaryDiagnostic() : Solution(2021, 3) {
     }
 
     private int GetRating(string input, Commonality commonality) {
-        var initialMatrix = input.ToMatrix(t => t);
+        var initialMatrix = input.ToMatrix();
 
         var ratingBits = Enumerable
-            .Range(0, initialMatrix.GetColumnCount())
+            .Range(0, initialMatrix.ColumnCount)
             .Aggregate(
                 initialMatrix,
                 (reducedMatrix, columnIndex) => {
-                    if (reducedMatrix.GetRowCount() == 1) return reducedMatrix;
-                    var targetBit = GetBitByCommonality(reducedMatrix.GetColumnByIndex(columnIndex), commonality);
-                    return reducedMatrix.Where(candidate => candidate[columnIndex] == targetBit).ToArray();
+                    if (reducedMatrix.RowCount == 1) return reducedMatrix;
+                    var targetBit = GetBitByCommonality(reducedMatrix[.., columnIndex], commonality);
+                    return reducedMatrix.FilterRows(candidate => candidate[columnIndex] == targetBit);
                 }
             )
+            .AsRows()
             .Single();
 
         return Convert.ToInt32(new string(ratingBits), 2);

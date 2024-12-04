@@ -1,3 +1,5 @@
+using AOC.Utilities;
+
 namespace AOC.Y2024;
 
 public class D02RedNosedReports() : Solution(2024, 2) {

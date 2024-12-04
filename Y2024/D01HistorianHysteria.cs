@@ -1,3 +1,5 @@
+using AOC.Utilities;
+
 namespace AOC.Y2024;
 
 public class D01HistorianHysteria() : Solution(2024, 1) {
@@ -5,9 +7,9 @@ public class D01HistorianHysteria() : Solution(2024, 1) {
         return input
             .SplitOnNewLines()
             .Select(line => line.SplitOnWhitespace().Select(int.Parse))
-            .Transpose()
-            .Select(list => list.Order())
-            .Transpose()
+            .AsMatrix()
+            .TransformColumns(list => list.Order())
+            .AsRows()
             .Select(array => Math.Abs(array[1] - array[0]))
             .Sum();
     }
@@ -16,7 +18,9 @@ public class D01HistorianHysteria() : Solution(2024, 1) {
         return input
             .SplitOnNewLines()
             .Select(line => line.SplitOnWhitespace().Select(int.Parse))
-            .Transpose()
+            .AsMatrix()
+            .AsColumns()
+            .ToArray()
             .Then(
                 lists => lists[0]
                     .Select(list0Item => lists[1].Count(list1Item => list1Item == list0Item) * list0Item)

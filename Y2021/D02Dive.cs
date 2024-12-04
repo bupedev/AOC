@@ -1,3 +1,5 @@
+using AOC.Utilities;
+
 namespace AOC.Y2021;
 
 public class D02Dive() : Solution(2021, 2) {

@@ -1,3 +1,5 @@
+using AOC.Utilities;
+
 namespace AOC.Y2021;
 
 public class D01SonarSweep() : Solution(2021, 1) {
