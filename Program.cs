@@ -56,17 +56,19 @@ void RunSolution(int yearNumber, int dayNumber, FileInfo? puzzleFile, string? pu
 
         // Write solution result and diagnostics... 
         var elapsedTime = stopwatch.Elapsed;
-        var resultJson = JsonSerializer.Serialize(
-            result,
-            new JsonSerializerOptions {
-                WriteIndented = true
-            }
-        );
+        var resultText = result as string ??
+                         JsonSerializer.Serialize(
+                             result,
+                             new JsonSerializerOptions {
+                                 WriteIndented = true
+                             }
+                         );
+
         Console.Out.WriteLine(
             $"Solution for part {partNumber} of day {dayNumber} of {yearNumber} found in {elapsedTime}!"
         );
         Console.Out.WriteLine();
-        Console.Out.WriteLine(resultJson);
+        Console.Out.WriteLine(resultText);
         Console.Out.WriteLine();
     }
 }
