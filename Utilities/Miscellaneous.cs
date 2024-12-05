@@ -31,4 +31,8 @@ public static class Miscellaneous {
     ) {
         return firstSource.SelectMany(first => secondSource.Select(second => (first, second)));
     }
+
+    public static Func<T, bool> Not<T>(Func<T, bool> predicate) {
+        return x => !predicate(x);
+    }
 }
