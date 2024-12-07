@@ -31,9 +31,15 @@ public sealed class Grid<T> {
 
     public int ColumnCount { get; }
 
-    public T this[GridIndex index] => _data[index.Row][index.Row];
+    public T this[GridIndex index] {
+        get => this[index.Row, index.Column];
+        set => this[index.Row, index.Column] = value;
+    }
 
-    public T this[int row, int column] => _data[row][column];
+    public T this[int row, int column] {
+        get => _data[row][column];
+        set => _data[row][column] = value;
+    }
 
     public T[] this[int row, Range columnRange] => _data[row][columnRange];
 
@@ -41,6 +47,10 @@ public sealed class Grid<T> {
 
     public Grid<T> this[Range rowRange, Range columnRange] =>
         new(_data[rowRange].Select(row => row[columnRange]).ToArray());
+
+    public Grid<T> Clone() {
+        return new Grid<T>(_data.Select(row => row.Select(columnValue => columnValue).ToArray()).ToArray());
+    }
 
     public IEnumerable<T[]> AsRows() {
         return _data;
@@ -109,6 +119,18 @@ public sealed class Grid<T> {
             )
             .ToArray()
         );
+    }
+
+    public Grid<TOut> Transform<TOut>(Func<T, TOut> transformation) {
+        return Transform<TOut>((grid, index) => transformation(grid[index]));
+    }
+
+    public IEnumerable<GridIndex> FindIndices(Func<Grid<T>, GridIndex, bool> predicate) {
+        return GetIndices().Where(index => predicate(this, index));
+    }
+
+    public IEnumerable<GridIndex> FindIndices(Func<T, bool> predicate) {
+        return FindIndices((grid, index) => predicate(grid[index]));
     }
 
     public IEnumerable<T> Flatten() {

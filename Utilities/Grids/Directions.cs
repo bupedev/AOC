@@ -11,6 +11,13 @@ public enum CompassDirection {
     NorthWest
 }
 
+public enum TurnDirection {
+    Forward,
+    Right,
+    Backward,
+    Left
+}
+
 public static class CompassDirections {
     public static readonly IEnumerable<CompassDirection> All = Enum.GetValues<CompassDirection>();
 
@@ -36,5 +43,9 @@ public static class CompassDirectionExtensions {
             CompassDirection.NorthWest => new GridIndex(-1, -1),
             _ => throw new ArgumentOutOfRangeException(nameof(compassDirection), compassDirection, null)
         };
+    }
+
+    public static CompassDirection Turn(this CompassDirection compassDirection, TurnDirection turnDirection) {
+        return (CompassDirection)(((int)compassDirection + (int)turnDirection * 2) % 8);
     }
 }
