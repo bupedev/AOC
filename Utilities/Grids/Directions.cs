@@ -24,16 +24,16 @@ public static class CompassDirections {
 }
 
 public static class CompassDirectionExtensions {
-    public static (int RowOffset, int ColumnOffset) GetGridOffset(this CompassDirection compassDirection) {
+    public static GridIndex GetGridOffset(this CompassDirection compassDirection) {
         return compassDirection switch {
-            CompassDirection.North => (0, -1),
-            CompassDirection.NorthEast => (1, -1),
-            CompassDirection.East => (1, 0),
-            CompassDirection.SouthEast => (1, 1),
-            CompassDirection.South => (0, 1),
-            CompassDirection.SouthWest => (-1, 1),
-            CompassDirection.West => (-1, 0),
-            CompassDirection.NorthWest => (-1, -1),
+            CompassDirection.North => new GridIndex(0, -1),
+            CompassDirection.NorthEast => new GridIndex(1, -1),
+            CompassDirection.East => new GridIndex(1, 0),
+            CompassDirection.SouthEast => new GridIndex(1, 1),
+            CompassDirection.South => new GridIndex(0, 1),
+            CompassDirection.SouthWest => new GridIndex(-1, 1),
+            CompassDirection.West => new GridIndex(-1, 0),
+            CompassDirection.NorthWest => new GridIndex(-1, -1),
             _ => throw new ArgumentOutOfRangeException(nameof(compassDirection), compassDirection, null)
         };
     }

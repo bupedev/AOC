@@ -19,11 +19,11 @@ public static class Miscellaneous {
         return input.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries);
     }
 
-    public static Grid<T> AsMatrix<T>(this IEnumerable<IEnumerable<T>> values) {
+    public static Grid<T> AsGrid<T>(this IEnumerable<IEnumerable<T>> values) {
         return new Grid<T>(values.Select(x => x.ToArray()).ToArray());
     }
 
-    public static Grid<char> ToMatrix(this string input) {
+    public static Grid<char> ToGrid(this string input) {
         return new Grid<char>(input.SplitOnNewLines().Select(rowCharacters => rowCharacters.ToArray()).ToArray());
     }
 

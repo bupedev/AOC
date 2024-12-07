@@ -6,10 +6,10 @@ namespace AOC.Y2024;
 public class D04CeresSearch() : Solution(2024, 4) {
     protected override object GetPart1Result(string input) {
         return input
-            .ToMatrix()
+            .ToGrid()
             .Transform(
-                (matrix, row, column) => CompassDirections.All
-                    .Count(direction => new string(matrix.Slice(direction, row, column, 4)) == "XMAS")
+                (grid, index) => CompassDirections.All
+                    .Count(direction => new string(grid.Slice(direction, index, 4)) == "XMAS")
             )
             .Flatten()
             .Sum();
@@ -17,14 +17,14 @@ public class D04CeresSearch() : Solution(2024, 4) {
 
     protected override object GetPart2Result(string input) {
         return input
-            .ToMatrix()
+            .ToGrid()
             .SlidingWindow(3, 3)
             .Select(
-                matrix => Combine(matrix.GetIndices(), CompassDirections.Ordinals)
+                grid => Combine(grid.GetIndices(), CompassDirections.Ordinals)
                     .Count(
                         t => {
-                            var ((row, column), direction) = t;
-                            return new string(matrix.Slice(direction, row, column, 3)) == "MAS";
+                            var (index, direction) = t;
+                            return new string(grid.Slice(direction, index, 3)) == "MAS";
                         }
                     )
             )

@@ -12,7 +12,7 @@ public class D03BinaryDiagnostic() : Solution(2021, 3) {
 
     private int GetRate(string input, char targetBit) {
         var rateBits = input
-            .ToMatrix()
+            .ToGrid()
             .AsColumns()
             .Select(
                 column => GetBitByCommonality(column, Commonality.Most) == targetBit
@@ -32,16 +32,16 @@ public class D03BinaryDiagnostic() : Solution(2021, 3) {
     }
 
     private int GetRating(string input, Commonality commonality) {
-        var initialMatrix = input.ToMatrix();
+        var initialGrid = input.ToGrid();
 
         var ratingBits = Enumerable
-            .Range(0, initialMatrix.ColumnCount)
+            .Range(0, initialGrid.ColumnCount)
             .Aggregate(
-                initialMatrix,
-                (reducedMatrix, columnIndex) => {
-                    if (reducedMatrix.RowCount == 1) return reducedMatrix;
-                    var targetBit = GetBitByCommonality(reducedMatrix[.., columnIndex], commonality);
-                    return reducedMatrix.FilterRows(candidate => candidate[columnIndex] == targetBit);
+                initialGrid,
+                (reducedGrid, columnIndex) => {
+                    if (reducedGrid.RowCount == 1) return reducedGrid;
+                    var targetBit = GetBitByCommonality(reducedGrid[.., columnIndex], commonality);
+                    return reducedGrid.FilterRows(candidate => candidate[columnIndex] == targetBit);
                 }
             )
             .AsRows()

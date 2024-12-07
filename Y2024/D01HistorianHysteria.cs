@@ -7,7 +7,7 @@ public class D01HistorianHysteria() : Solution(2024, 1) {
         return input
             .SplitOnNewLines()
             .Select(line => line.SplitOnWhitespace().Select(int.Parse))
-            .AsMatrix()
+            .AsGrid()
             .TransformColumns(list => list.Order())
             .AsRows()
             .Select(array => Math.Abs(array[1] - array[0]))
@@ -18,7 +18,7 @@ public class D01HistorianHysteria() : Solution(2024, 1) {
         return input
             .SplitOnNewLines()
             .Select(line => line.SplitOnWhitespace().Select(int.Parse))
-            .AsMatrix()
+            .AsGrid()
             .AsColumns()
             .ToArray()
             .Then(
