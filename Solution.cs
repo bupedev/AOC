@@ -10,7 +10,7 @@ public abstract class Solution(int yearNumber, int dayNumber) {
     /// <summary>
     /// A dictionary containing all solutions in the project, keyed by their year and day numbers.
     /// </summary>
-    public static readonly Dictionary<(int, int), Solution> ByDay = typeof(Solution)
+    public static readonly Dictionary<(int Year, int Day), Solution> ByYearAndDay = typeof(Solution)
         .Assembly
         .GetTypes()
         .Where(type => type.IsSubclassOf(typeof(Solution)))

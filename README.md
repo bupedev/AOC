@@ -16,18 +16,19 @@ Description:
   Bupé's solutions to Advent of Code (https://adventofcode.com)
 
 Usage:
-  AOC [options]
+  AOC [command] [options]
 
 Options:
-  -y, --year <year>  The year of the puzzle.
-  -d, --day <day>    The day of the puzzle.
-  -f, --file <file>  The file containing the input text for the puzzle. Mutually exclusive with --text (-t).
-  -t, --text <text>  The input text for the puzzle. Mutually exclusive with --file (-f).
-  --version          Show version information
-  -?, -h, --help     Show help and usage information
+  --version       Show version information
+  -?, -h, --help  Show help and usage information
+
+Commands:
+  ping   Send a request to the server to verify authenticated 
+         connection is working correctly.
+  solve  Solve the puzzle on a particular year and day.
 ```
 
-The entry point for the application uses `System.Reflection` (I know, I am definitely on Santa's naughty list this
+The solve command' uses `System.Reflection` (I know, I am definitely on Santa's naughty list this
 year), to select the solution code for each day and year. Each solution is an extension of the `Solution` class which
 must provide some key information about the solution (day, year and some functions that return the result of the
 solution given some input text).
@@ -48,18 +49,28 @@ As a test, I have included `D00Example.cs` in the project, which will print info
 console:
 
 ```text
-> .\AOC.exe -y 0 -d 0 -t "Hello World!"
+> .\AOC.exe solve -y 0 -d 0 -t "Hello World!"
 Solution for part 1 of day 0 of 0 found in 00:00:00.0003227!
+
+Sample solution for part 1 of day 0 of 0 found in 00:00:00.0002368!
 
 {
   "Lines": [
-    "Hello world!"
+    "Hello World!"
   ]
 }
 
-Solution for part 2 of day 0 of 0 found in 00:00:00.0004838!
+Sample solution for part 2 of day 0 of 0 found in 00:00:00.0002955!
 
 {
   "CharCount": 12
 }
 ```
+
+For real year/day combinations, the application will also provide the solution using your actual puzzle input. The puzzle inout is automatically fetched from the server providing that a valid session ID is stored in the environment variable named `AOC_SESSION_ID`.
+
+This tool does follow the automation guidelines on the [/r/adventofcode community wiki](https://www.reddit.com/r/adventofcode/wiki/faqs/automation). Specifically:
+
+ * Outbound calls are throttled to every 2.5 minutes (see `Client.cs`)
+ * The `User-Agent` points to this repository on Github (see `Client.cs`)
+ * Once inputs are downloaded, they are cached locally in app data (see `PuzzleService.cs`)
