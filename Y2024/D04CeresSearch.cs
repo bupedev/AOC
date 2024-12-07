@@ -1,4 +1,4 @@
-using AOC.Utilities;
+using AOC.Utilities.Grids;
 using static AOC.Utilities.Miscellaneous;
 
 namespace AOC.Y2024;
@@ -8,7 +8,7 @@ public class D04CeresSearch() : Solution(2024, 4) {
         return input
             .ToMatrix()
             .Transform(
-                (matrix, row, column) => GridDirections.All
+                (matrix, row, column) => CompassDirections.All
                     .Count(direction => new string(matrix.Slice(direction, row, column, 4)) == "XMAS")
             )
             .Flatten()
@@ -20,7 +20,7 @@ public class D04CeresSearch() : Solution(2024, 4) {
             .ToMatrix()
             .SlidingWindow(3, 3)
             .Select(
-                matrix => Combine(matrix.GetIndices(), GridDirections.Diagonals)
+                matrix => Combine(matrix.GetIndices(), CompassDirections.Ordinals)
                     .Count(
                         t => {
                             var ((row, column), direction) = t;
