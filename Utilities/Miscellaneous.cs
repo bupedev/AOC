@@ -41,4 +41,24 @@ public static class Miscellaneous {
     public static Func<T, bool> Not<T>(Func<T, bool> predicate) {
         return x => !predicate(x);
     }
+
+    public static IEnumerable<T[]> GetAllPermutations<T>(this T[] candidateValues, int length) {
+        var indices = new int[length];
+        var currentArray = new T[length];
+
+        while (true) {
+            foreach (var i in ..length) currentArray[i] = candidateValues[indices[i]];
+            yield return (T[])currentArray.Clone();
+
+            var position = length - 1;
+            while (position >= 0 && indices[position] == candidateValues.Length - 1) {
+                indices[position] = 0;
+                position--;
+            }
+
+            if (position < 0) break;
+
+            indices[position]++;
+        }
+    }
 }
