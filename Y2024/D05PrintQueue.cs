@@ -27,7 +27,7 @@ public class D05PrintQueue() : Solution(2024, 5) {
     }
 
     private static (ILookup<int, int> Dependencies, IReadOnlyList<int[]> Lists) Parse(string input) {
-        var parts = input.Split(Environment.NewLine + Environment.NewLine);
+        var parts = input.SplitOnDoubleNewLines();
         return (
             Dependencies: parts[0]
                 .SplitOnNewLines()

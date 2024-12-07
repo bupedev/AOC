@@ -1,3 +1,5 @@
+using AOC.Utilities.Grids;
+
 namespace AOC.Utilities;
 
 public static class Miscellaneous {
@@ -5,20 +7,24 @@ public static class Miscellaneous {
         return func(value);
     }
 
+    public static string[] SplitOnDoubleNewLines(this string input) {
+        return input.Split(["\n\n", "\r\n\r\n"], StringSplitOptions.RemoveEmptyEntries);
+    }
+
     public static string[] SplitOnNewLines(this string input) {
-        return input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        return input.Split(["\n", "\r\n"], StringSplitOptions.RemoveEmptyEntries);
     }
 
     public static string[] SplitOnWhitespace(this string input) {
         return input.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries);
     }
 
-    public static Matrix<T> AsMatrix<T>(this IEnumerable<IEnumerable<T>> values) {
-        return new Matrix<T>(values.Select(x => x.ToArray()).ToArray());
+    public static Grid<T> AsMatrix<T>(this IEnumerable<IEnumerable<T>> values) {
+        return new Grid<T>(values.Select(x => x.ToArray()).ToArray());
     }
 
-    public static Matrix<char> ToMatrix(this string input) {
-        return new Matrix<char>(input.SplitOnNewLines().Select(rowCharacters => rowCharacters.ToArray()).ToArray());
+    public static Grid<char> ToMatrix(this string input) {
+        return new Grid<char>(input.SplitOnNewLines().Select(rowCharacters => rowCharacters.ToArray()).ToArray());
     }
 
     public static string Join(this IEnumerable<string> values, string? separator = null) {
