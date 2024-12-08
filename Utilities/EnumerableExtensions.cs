@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace AOC.Utilities;
 
 public static class EnumerableExtensions {
@@ -68,5 +70,14 @@ public static class EnumerableExtensions {
 
     public static IEnumerable<(T Value, int Index)> WithIndices<T>(this IEnumerable<T> items) {
         return items.Select((item, index) => (item, index));
+    }
+
+    public static T Product<T>(this IEnumerable<T> items) where T : INumber<T> {
+        return items.Aggregate((prod, value) => prod * value);
+    }
+
+    public static TResult Product<TItem, TResult>(this IEnumerable<TItem> items, Func<TItem, TResult> selector)
+        where TResult : INumber<TResult> {
+        return items.Select(selector).Aggregate((prod, value) => prod * value);
     }
 }
