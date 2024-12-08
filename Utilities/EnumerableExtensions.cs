@@ -58,4 +58,11 @@ public static class EnumerableExtensions {
             .Select(pair => pair.Second.CompareTo(pair.First) >= 0)
             .Any(isAscendingOrEqual => isAscendingOrEqual);
     }
+
+    public static IEnumerable<(T First, T Second)> GetUniquePairs<T>(this IEnumerable<T> items) {
+        var array = items.ToArray();
+        foreach (var i in ..array.Length)
+        foreach (var j in (i + 1)..array.Length)
+            yield return (array[i], array[j]);
+    }
 }

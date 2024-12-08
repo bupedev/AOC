@@ -13,6 +13,10 @@ public sealed record GridIndex(int Row, int Column) {
         return (a.Row + b.Row, a.Column + b.Column);
     }
 
+    public static GridIndex operator -(GridIndex a, GridIndex b) {
+        return (a.Row - b.Row, a.Column - b.Column);
+    }
+
     public static GridIndex operator *(int a, GridIndex b) {
         return new GridIndex(a * b.Row, a * b.Column);
     }
