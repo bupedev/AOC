@@ -65,4 +65,8 @@ public static class EnumerableExtensions {
         foreach (var j in (i + 1)..array.Length)
             yield return (array[i], array[j]);
     }
+
+    public static IEnumerable<(T Value, int Index)> WithIndices<T>(this IEnumerable<T> items) {
+        return items.Select((item, index) => (item, index));
+    }
 }
