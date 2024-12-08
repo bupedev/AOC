@@ -80,4 +80,26 @@ public static class EnumerableExtensions {
         where TResult : INumber<TResult> {
         return items.Select(selector).Aggregate((prod, value) => prod * value);
     }
+
+    public static IEnumerable<TResult> Scan<TIn, TResult>(
+        this IEnumerable<TIn> items,
+        TResult seed,
+        Func<TResult, TIn, TResult> accumulator
+    ) {
+        var current = seed;
+        yield return current;
+
+        foreach (var item in items) {
+            current = accumulator(current, item);
+            yield return current;
+        }
+    }
+
+    public static IEnumerable<IEnumerable<TResult>> Split<TIn, TGroup, TResult>(
+        this IEnumerable<TIn> items,
+        Func<TIn, TGroup> grouper,
+        Func<TIn, TResult> selector
+    ) {
+        return items.GroupBy(grouper).Select(group => group.Select(selector));
+    }
 }
