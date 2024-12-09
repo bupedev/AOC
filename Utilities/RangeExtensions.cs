@@ -13,6 +13,22 @@ public static class RangeExtensions {
         return start..end;
     }
 
+    public static int GetLength(this Range range) {
+        range.ValidateNotFromEnd();
+        return range.End.Value - range.Start.Value;
+    }
+
+    public static IEnumerable<Range> Split(this Range range, int splitIndex) {
+        range.ValidateNotFromEnd();
+        if (splitIndex > range.Start.Value && splitIndex < range.End.Value)
+            return [range.Start.Value..splitIndex, splitIndex..range.End.Value];
+        return [range];
+    }
+
+    public static IEnumerable<Range> SplitOffset(this Range range, int offset) {
+        return range.Split(range.Start.Value + offset);
+    }
+
     public static RangeEnumerator GetEnumerator(this Range range) {
         range.ValidateNotFromEnd();
         return new RangeEnumerator(range.Start.Value, range.End.Value);
