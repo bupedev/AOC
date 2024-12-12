@@ -3,8 +3,7 @@ using AOC.Utilities;
 namespace AOC.Y2024;
 
 public class D11PlutonianPebbles() : Solution(2024, 11) {
-    private static readonly Dictionary<long, Dictionary<int, long>> StoneCountByBlinkByValue = new();
-    private static readonly Dictionary<long, long[]> BlinkCache = new();
+    private static readonly Dictionary<(long, int), long> StoneCountByBlinkByValue = new();
 
     protected override object GetPart1Result(string input) {
         return input.SplitOnWhitespace().Select(long.Parse).Select(num => CountStonesDynamically(num, 25)).Sum();
@@ -18,12 +17,10 @@ public class D11PlutonianPebbles() : Solution(2024, 11) {
         return generation == 0
             ? 1
             : StoneCountByBlinkByValue
-                .GetValueOrAssignDefault(stoneValue, () => new Dictionary<int, long>())
                 .GetValueOrAssignDefault(
-                    generation,
+                    (stoneValue, generation),
                     () =>
-                        BlinkCache
-                            .GetValueOrAssignDefault(stoneValue, () => BlinkAtStone(stoneValue))
+                        BlinkAtStone(stoneValue)
                             .Select(newStoneValue => CountStonesDynamically(newStoneValue, generation - 1))
                             .Sum()
                 );
