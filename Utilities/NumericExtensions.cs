@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace AOC.Utilities;
 
 public static class NumericExtensions {
@@ -17,5 +19,10 @@ public static class NumericExtensions {
     public static long[] SplitByDigits(this long number, long digits) {
         var divisor = (long)Math.Pow(10, digits);
         return [number / divisor, number % divisor];
+    }
+    
+    public static bool IsNaturalNumber<T>(this T value) where T : INumber<T>
+    {
+        return value % T.One == T.Zero;
     }
 }

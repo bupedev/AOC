@@ -102,4 +102,14 @@ public static class EnumerableExtensions {
     ) {
         return items.GroupBy(grouper).Select(group => group.Select(selector));
     }
+    
+    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source)
+    {
+        return source.SelectWhereNotNull(t => t);
+    }
+    
+    public static IEnumerable<S> SelectWhereNotNull<T, S>(this IEnumerable<T> source, Func<T, S?> selector)
+    {
+        return source.Select(selector).Where(s => s is not null).Select(s => s!);
+    }
 }
