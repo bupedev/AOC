@@ -3,6 +3,11 @@ using System.Numerics;
 namespace AOC.Utilities;
 
 public static class NumericExtensions {
+    public static int Modulo(this int value, int @base)
+    {
+        return (value % @base + @base) % @base;
+    }
+    
     public static int CountDigits(this int number) {
         return (int)Math.Floor(Math.Log10(number) + 1);
     }
