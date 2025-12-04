@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Net;
 
@@ -9,8 +10,14 @@ public enum ClientResponseType {
     Throttle
 }
 
+public enum RequestKind
+{
+    Puzzle,
+    Leaderboard
+}
+
 public static class Client {
-    private static readonly TimeSpan ThrottleRate = new(0, 2, 30);
+    private static readonly ImmutableDictionary<RequestKind, TimeSpan> ThrottleRate = new Dictionary<RequestKind, TimeSpan> {[RequestKind.Puzzle] = new(0, 2, 30), [RequestKind.Leaderboard] = new(0, 15, 0)}.ToImmutableDictionary();
 
     private static readonly HttpClient HttpClient = new() {
         BaseAddress = new Uri("https://adventofcode.com/"),
@@ -20,38 +27,55 @@ public static class Client {
         }
     };
 
-    public static ClientResponseType TryReadPropertiesFromServer(int year, int day, out string puzzleInput) {
-        puzzleInput = string.Empty;
+    public static ClientResponseType TryReadPuzzle(int year, int day, out string puzzleInput) {
+        return TryRead(
+            RequestKind.Leaderboard, 
+            $"{year}/day/{day}/input", 
+            out puzzleInput);
+    }
+    
+    public static ClientResponseType TryReadLeaderboard(int year, int leaderboardId, out string puzzleInput)
+    {
+        return TryRead(
+            RequestKind.Leaderboard, 
+            $"{year}/leaderboard/private/view/{leaderboardId}.json", 
+            out puzzleInput);
+    }
+    
+    private static ClientResponseType TryRead(RequestKind kind, string requestUri, out string response) {
+        response = string.Empty;
 
-        if (ThrottleRequired()) return ClientResponseType.Throttle;
+        if (ThrottleRequired(kind)) return ClientResponseType.Throttle;
 
-        var result = Get($"{year}/day/{day}/input");
+        var result = Get(kind, requestUri);
 
         if (result.StatusCode == HttpStatusCode.OK) {
-            puzzleInput = result.Content.ReadAsStringAsync().Result;
+            response = result.Content.ReadAsStringAsync().Result;
             return ClientResponseType.Pass;
         }
 
         return ClientResponseType.Fail;
     }
 
-    private static HttpResponseMessage Get(string requestUri) {
+    private static HttpResponseMessage Get(RequestKind kind, string requestUri) {
         Environment.SetEnvironmentVariable(
-            "AOC_LAST_REQUEST",
+            LastRequestVariable(kind),
             DateTime.UtcNow.ToString("o"),
             EnvironmentVariableTarget.User
         );
         return HttpClient.Send(new HttpRequestMessage(HttpMethod.Get, requestUri));
     }
 
-    private static bool ThrottleRequired() {
-        if (Environment.GetEnvironmentVariable("AOC_LAST_REQUEST", EnvironmentVariableTarget.User) is
+    private static bool ThrottleRequired(RequestKind kind) {
+        if (Environment.GetEnvironmentVariable(LastRequestVariable(kind), EnvironmentVariableTarget.User) is
             not { } lastRequestString)
             return false;
 
         var lastRequest = DateTime.Parse(lastRequestString, null, DateTimeStyles.RoundtripKind);
         var timeSinceLastRequest = DateTime.UtcNow - lastRequest;
 
-        return timeSinceLastRequest < ThrottleRate;
+        return timeSinceLastRequest < ThrottleRate[kind];
     }
+    
+    private static string LastRequestVariable(RequestKind kind) => $"AOC_LAST_{kind.ToString().ToUpper()}_REQUEST";
 }

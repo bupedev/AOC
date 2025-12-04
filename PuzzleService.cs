@@ -13,7 +13,7 @@ public static class PuzzleService {
 
         if (TryReadFromFile(GetPuzzlePropertyPath(year, day, "input"), out input)) return true;
 
-        if (Client.TryReadPropertiesFromServer(year, day, out input) == ClientResponseType.Pass) {
+        if (Client.TryReadPuzzle(year, day, out input) == ClientResponseType.Pass) {
             WriteToFile(GetPuzzlePropertyPath(year, day, "input"), input);
             return true;
         }

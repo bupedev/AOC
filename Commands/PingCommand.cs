@@ -1,4 +1,5 @@
 using System.CommandLine;
+using System.Diagnostics;
 
 namespace AOC.Commands;
 
@@ -15,7 +16,7 @@ public static class PingCommand {
     }
 
     private static void Ping() {
-        switch (Client.TryReadPropertiesFromServer(2015, 1, out _)) {
+        switch (Client.TryReadPuzzle(2015, 1, out _)) {
             case ClientResponseType.Pass:
                 Console.Out.WriteLine("Successfully connected to server with authentication!");
                 break;
@@ -27,12 +28,12 @@ public static class PingCommand {
                 break;
             case ClientResponseType.Throttle:
                 Console.Error.WriteLine(
-                    "It has been less than a minute before last making a request to the server, " +
+                    "It has been less than a 150 seconds before last making a request to the server, " +
                     "please wait before trying again!"
                 );
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new UnreachableException();
         }
     }
 }
