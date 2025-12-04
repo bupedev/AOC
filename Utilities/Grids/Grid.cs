@@ -1,5 +1,29 @@
 namespace AOC.Utilities.Grids;
 
+public static class Neighborhoods
+{
+    public static IEnumerable<GridIndex> Moore(GridIndex centre, uint size, bool includeCenter = false)
+    {
+        for (var row = -(int)size; row <= (int)size; row++)
+        {
+            for (var column = -(int)size; column <= (int)size; column++)
+            {
+                if (row == 0 && column == 0)
+                {
+                    if (includeCenter)
+                    {
+                        yield return new GridIndex(centre.Row + row, centre.Column + column);
+                    }
+                }
+                else
+                {
+                    yield return new GridIndex(centre.Row + row, centre.Column + column);
+                }
+            }            
+        }
+    }
+}
+
 public sealed record GridIndex(int Row, int Column)
 {
     public static implicit operator GridIndex((int Row, int Column) values)
