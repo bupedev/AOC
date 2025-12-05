@@ -23,9 +23,11 @@ Options:
   -?, -h, --help  Show help and usage information
 
 Commands:
-  ping   Send a request to the server to verify authenticated 
-         connection is working correctly.
-  solve  Solve the puzzle on a particular year and day.
+  ping         Send a request to the server to verify authenticated connection 
+               is working correctly.
+  solve        Solve the puzzle on a particular year and day.
+  leaderboard  Request a leaderboard from the server and print it to the 
+               console.
 ```
 
 The solve command' uses `System.Reflection` (I know, I am definitely on Santa's naughty list this

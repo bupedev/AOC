@@ -54,7 +54,7 @@ public static class SolveCommand {
         // Get the inputs for the puzzle (both from CLI and service)...
         if (puzzleText is not null) labeledInputText.Add(("Sample", puzzleText));
         if (puzzleFile is not null) labeledInputText.Add(("Sample", File.ReadAllText(puzzleFile.FullName)));
-        if (PuzzleService.TryGetPuzzleInput(yearNumber, dayNumber, out var finalInput))
+        if (CacheService.TryGetPuzzleInput(yearNumber, dayNumber, out var finalInput))
             labeledInputText.Add(("Final", finalInput));
 
         if (!labeledInputText.Any()) {
